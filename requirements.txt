@@ -1,11 +1,10 @@
-
-streamlit==1.64.0
-torch==2.14.0+cpu
-torchvision==0.29.0+cpu
-torchaudio==2.11.0+cpu
+streamlit==1.33.0
+torch==2.2.0
+torchvision==0.17.0
+torchaudio==2.2.0
 numpy
 pillow
-opencv-python
+opencv-python-headless
 scikit-learn
 pandas
 matplotlib
@@ -17,6 +16,4 @@ toml
 pydeck
 httptools
 itsdangerous
-narwhals
 fpdf
-
