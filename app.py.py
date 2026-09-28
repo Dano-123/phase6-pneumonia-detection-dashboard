@@ -228,30 +228,36 @@ def create_pdf_report(label, normal_prob, pneu_prob, confidence,
  # Create PDF Object
  # ----------------------------------------------------------------------
     pdf.add_page()                                     # initialise PDF object and first page
-    pdf.set_auto_page_break(auto=True, margin=15)      # enable automatic page breaks
+    #pdf.set_auto_page_break(auto=True, margin=15)      # enable automatic page breaks
     pdf.section_title("Imaging")                      
     
 # ----------------------------------------------------------------------
-# Creating Image for PDF 
+# Streamlit Cloud temporary file directory
 # ----------------------------------------------------------------------
     # Save PIL image to a temporary PNG file because FPDF requires a file path
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmp1:
+    with tempfile.NamedTemporaryFile(dir=".", delete=False, suffix=".png") as tmp1:
         image.save(tmp1.name)
         pdf.set_font("Arial", "B", 12)
         pdf.cell(0, 8, "Original Chest X-ray", ln=True)  # Section label
         pdf.image(tmp1.name, w=120)                      # embed chest x-ray image
         pdf.ln(6)                                        # spacing after image
-
+        
+# ----------------------------------------------------------------------
+# CAM heatmap temp file
+# ----------------------------------------------------------------------
     # Save CAM heatmap to temporary file for embedding
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmp2:
+    with tempfile.NamedTemporaryFile(dir=".", delete=False, suffix=".png") as tmp2:
         cam_image.save(tmp2.name)
         pdf.set_font("Arial", "B", 12)
         pdf.cell(0, 8, "CAM Heatmap", ln=True)
         pdf.image(tmp2.name, w=120)
         pdf.ln(6)
-
+        
+# ----------------------------------------------------------------------
+# Overlay temp file
+# ----------------------------------------------------------------------
     # Save overlay image showing model attention regions
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmp3:
+    with tempfile.NamedTemporaryFile(dir=".", delete=False, suffix=".png") as tmp3:
         overlay_image.save(tmp3.name)
         pdf.set_font("Arial", "B", 12)
         pdf.cell(0, 8, "Overlay (X-ray + CAM)", ln=True)
@@ -261,8 +267,11 @@ def create_pdf_report(label, normal_prob, pneu_prob, confidence,
     # Section header for the probability visualisation page
     pdf.section_title("Probability Bar Chart")
     
+# ----------------------------------------------------------------------
+# Bar chart temp file
+# ----------------------------------------------------------------------
     # Save bar chart (PIL image) to a temporary PNG file
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmp4:
+    with tempfile.NamedTemporaryFile(dir=".", delete=False, suffix=".png") as tmp4:
         bar_chart_image.save(tmp4.name)
         pdf.image(tmp4.name, w=120)
     pdf.ln(6)
